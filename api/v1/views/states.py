@@ -17,6 +17,7 @@ def get_states():
 
 @app.route('/states', methods=['POST'])
 def create_state():
+    """Create a new state object"""
     if not request.json:
         abort(400, "Not a JSON")
     if not "name" in request.json:
@@ -38,6 +39,7 @@ def get_state(state_id):
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_request(state_id):
+    """Delete the state object with the specified state_id"""
     for city in state.cities:
         city.delete()
     state.delete()
@@ -47,6 +49,7 @@ def delete_request(state_id):
 
 @app_views.route('/states/<state_id>', methods=['PUT'])
 def update_state(state_id):
+    """Update the state object with the specified state_id"""
     if not request.json:
         abort(400, "Not a JSON")
     kwargs = request.get_json()
