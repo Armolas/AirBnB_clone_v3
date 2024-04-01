@@ -8,8 +8,6 @@ import os
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
-#host = os.eniron.get('HBNB_API_HOST', '0.0.0.0')
-#port = int(os.environ.get('HBNB_API_PORT', 5000))
 host = '0.0.0.0'
 port = 5000
 if 'HBNB_API_HOST' in os.environ:
