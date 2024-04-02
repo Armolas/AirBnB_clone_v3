@@ -5,6 +5,7 @@ from flask import abort, jsonify, request
 from api.v1.views import app_views
 from models import storage
 from models.review import Review
+from models.user import User
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
@@ -15,15 +16,15 @@ def get_reviews(place_id):
         abort(404)
     if request.method == 'GET':
         reviews = [review.to_dict() for review in place.reviews]
-        return jsonify(reviews)
+        return reviews
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         props = request.get_json()
-        if "user_id" not in props:
+        if not "user_id" in props:
             abort(400, "Missing user_id")
-        if "text" not in props:
+        if not "text" in props:
             abort(400, "Missing text")
 
         user = storage.get(User, props["user_id"])
@@ -53,7 +54,7 @@ def get_review(review_id):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.is_json:
             abort(400, "not a JSON")
         props = request.get_json()
         for key, value in props.items():
