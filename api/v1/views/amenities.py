@@ -7,7 +7,7 @@ from models import storage
 from models.amenity import Amenity
 
 
-@app_views.route('/amenities/', methods=['GET'])
+@app_views.route('/amenities/', methods=['GET', 'POST'])
 def get_amenties():
     """Gets all amenities"""
     all_amenities = storage.all(Amenity)
@@ -16,7 +16,7 @@ def get_amenties():
         return amenities
     
     if request.method == 'POST':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         if "name" not in request.json:
             abort(400, "Missing name")
@@ -27,7 +27,7 @@ def get_amenties():
         return jsonify(new_amenity.to_dict()), 201
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'])
+@app_views.route('/amenities/<amenity_id>', methods=['GET', 'DELETE', 'PUT'])
 def get_state(amenity_id):
     """Gets the amenity object of a specified amenity_id"""
     amenity = storage.get(Amenity, amenity_id)
@@ -42,7 +42,7 @@ def get_state(amenity_id):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.is_json:
             abort(404)
         props = request.get_json()
         for key, value in props.items():
