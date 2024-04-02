@@ -22,7 +22,7 @@ def get_cities(city_id):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         kwargs = request.get_json()
         for key in kwargs:
@@ -31,7 +31,7 @@ def get_cities(city_id):
         city.save()
         return city.to_dict()
 
-@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
+@app_views.route('/states/<state_id>/cities/', methods=['GET', 'POST'])
 def get_city(state_id):
     """retrieves a particular state object"""
     state = storage.get(State, state_id)
@@ -44,9 +44,9 @@ def get_city(state_id):
         return cities
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
-        if "name" not in request.json:
+        if not "name" in request.json:
             abort(400, "Missing name")
         kwargs = request.get_json()
         new_city = City(**kwargs)

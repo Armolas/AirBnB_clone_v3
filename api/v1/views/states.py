@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This is the state view"""
+
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
@@ -17,7 +18,7 @@ def get_states():
         return states_list
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         if not "name" in request.json:
             abort(400, "Missing name")
@@ -44,7 +45,7 @@ def get_state_id(state_id):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         kwargs = request.get_json()
         for key in kwargs:
