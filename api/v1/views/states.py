@@ -24,7 +24,7 @@ def get_states():
         new_state = State(**request.get_json())
         storage.new(new_state)
         storage.save()
-        return new_state.to_dict(), 201
+        return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'PUT'])
@@ -51,4 +51,4 @@ def get_state_id(state_id):
             if key not in ["id", "created_at", "updated_at"]:
                 setattr(state, key, kwargs[key])
         state.save()
-        return state.to_dict()
+        return jsonify(state.to_dict())
