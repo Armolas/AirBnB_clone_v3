@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """The User object view"""
 
+
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models import storage
@@ -13,20 +14,20 @@ def get_users():
     all_users = storage.all(User)
     users = [user.to_dict() for user in all_users.values()]
     if request.method == 'GET':
-        return jsonify(users)
+        return users
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         props = request.get_json()
-        if "email" not in props:
+        if not "email" in props:
             abort(400, "Missing email")
-        if "password" not in props:
+        if not "password" in props:
             abort(400, "Missing password")
         new_user = User(**props)
         storage.new(new_user)
         storage.save()
-        return jsonify(new_user.to_dict()), 200
+        return jsonify(new_user.to_dict()), 201
 
 
 @app_views.route('/users/<user_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -44,7 +45,7 @@ def get_user(user_id):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         props = request.get_json()
         for key, value in props.items():

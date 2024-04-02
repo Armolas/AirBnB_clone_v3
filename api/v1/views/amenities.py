@@ -43,7 +43,7 @@ def get_state(amenity_id):
 
     if request.method == 'PUT':
         if not request.is_json:
-            abort(404)
+            abort(400, "Not a JSON")
         props = request.get_json()
         for key, value in props.items():
             if key not in ["id", "created_at", "updated_at"]:
