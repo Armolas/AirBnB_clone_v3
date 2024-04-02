@@ -19,13 +19,13 @@ def get_places_city(city_id):
         return places
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.is_json:
             abort(400, "Not a JSON")
         props = request.get_json()
-        if "user_id" not in props:
+        if not "user_id" in props:
             abort(400, "Missing user_id")
-        if "name" not in request.json:
-            abort(404, "Missing name")
+        if not "name" in request.json:
+            abort(400, "Missing name")
         user = storage.get(User, props["user_id"])
         if user is None:
             abort(404)
@@ -49,12 +49,11 @@ def get_place(place_id):
     if request.method == 'DELETE':
         storage.delete(place)
         storage.save()
-
         return jsonify({}), 200
     
     if request.method == 'PUT':  
-        if not request.json:
-            abort(404, "Not a JSON")
+        if not request.is_json:
+            abort(400, "Not a JSON")
         props = request.get_json()
         for key, value in props.items():
             if key not in ["id", "user_id", "city_id", "created_at",
