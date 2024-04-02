@@ -31,7 +31,7 @@ def get_cities(city_id):
         city.save()
         return city.to_dict()
 
-@app_views.route('/states/<state_id>/cities/', methods=['GET', 'POST'])
+@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
 def get_city(state_id):
     """retrieves a particular state object"""
     state = storage.get(State, state_id)
