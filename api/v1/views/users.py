@@ -26,7 +26,7 @@ def get_users():
         new_user = User(**props)
         storage.new(new_user)
         storage.save()
-        return new_user.to_dict(), 201
+        return jsonify(new_user.to_dict()), 201
 
 
 @app_views.route('/users/<user_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -36,7 +36,7 @@ def get_user(user_id):
     if user is None:
         abort(404)
     if request.method == 'GET':
-        return user.to_dict()
+        return jsonify(user.to_dict())
 
     if request.method == 'DELETE':
         storage.delete(user)
@@ -51,4 +51,4 @@ def get_user(user_id):
             if key not in ["id", "email", "created_at", "updated_at"]:
                 setattr(user, key, value)
         storage.save()
-        return user.to_dict(), 200
+        return jsonify(user.to_dict()), 200
